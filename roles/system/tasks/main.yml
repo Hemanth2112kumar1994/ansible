@@ -1,0 +1,4 @@
+---
+- name: Check system uptime
+  command: uptime
+  register: uptime_output

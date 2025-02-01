@@ -1,0 +1,10 @@
+---
+- name: Configure Webserver
+  hosts: 172.31.83.93
+  become: yes
+  roles:
+    - install-git
+    - install-httpd
+    - install-telnet
+    - system
+

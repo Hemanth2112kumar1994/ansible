@@ -1,0 +1,31 @@
+---
+- name: Install Git
+  package:
+    name: git
+    state: present
+
+- name: Check if Git is running
+  shell: "pgrep git"
+  register: git_status
+  ignore_errors: yes
+
+- name: Get system uptime
+  shell: "uptime"
+  register: uptime_output
+
+- name: Get CPU usage
+  shell: "top -bn1 | grep 'Cpu(s)' | awk '{print $2 + $4}'"
+  register: cpu_usage
+
+- name: Get memory usage
+  shell: "free -m | awk 'NR==2 {printf \"%.2f%%\", $3*100/$2 }'"
+  register: memory_usage
+
+- name: Display system metrics
+  debug:
+    msg:
+      - "Uptime: {{ uptime_output.stdout }}"
+      - "CPU Usage: {{ cpu_usage.stdout }}%"
+      - "Memory Usage: {{ memory_usage.stdout }}"
+      - "Git Status: {{ 'Running' if git_status.rc == 0 else 'Not Running' }}"
+
